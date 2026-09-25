@@ -66,10 +66,17 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- Database migrations -->
+		<!-- Database migrations: the starter brings flyway-core plus Spring Boot's
+		     Flyway auto-configuration (a separate module since Spring Boot 4) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
+		</dependency>
+
+		<!-- PostgreSQL support for Flyway (split out of flyway-core since Flyway 10) -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
+			<artifactId>flyway-database-postgresql</artifactId>
 		</dependency>
 	</dependencies>
 

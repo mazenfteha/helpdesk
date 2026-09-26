@@ -12,8 +12,10 @@ import com.mazen.helpdesk.entity.User;
 import com.mazen.helpdesk.entity.Role;
 import com.mazen.helpdesk.exception.EmailAlreadyUsedException;
 import com.mazen.helpdesk.exception.InvalidCredentialsException;
+import com.mazen.helpdesk.exception.UserNotFoundException;
 import com.mazen.helpdesk.repository.UserRepository;
 import java.util.Locale;
+import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -54,6 +56,13 @@ public class AuthService {
                 .orElseThrow(InvalidCredentialsException::new);
 
         return tokenService.issueToken(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse getCurrentUser(UUID userId) {
+        return userRepository.findById(userId)
+                .map(UserResponse::from)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     private String normalizeEmail(String email) {

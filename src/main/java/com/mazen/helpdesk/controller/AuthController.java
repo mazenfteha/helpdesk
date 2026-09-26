@@ -3,6 +3,8 @@ package com.mazen.helpdesk.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mazen.helpdesk.dto.LoginRequest;
+import com.mazen.helpdesk.dto.LoginResponse;
 import com.mazen.helpdesk.dto.RegisterRequest;
 import com.mazen.helpdesk.dto.UserResponse;
 import com.mazen.helpdesk.service.AuthService;
@@ -27,6 +29,12 @@ public class AuthController {
     public UserResponse register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
     }
+
+    @PostMapping("/login")
+    public LoginResponse login(@Valid @RequestBody LoginRequest request) {
+        return authService.login(request);
+    }
+    
     
 
 }

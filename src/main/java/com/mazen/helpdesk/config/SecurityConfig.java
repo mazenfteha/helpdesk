@@ -23,6 +23,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/health", "/actuator/health", "/api/auth/register", "/api/auth/login", "/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/tickets").hasRole("CUSTOMER")
+                        .requestMatchers(HttpMethod.PUT, "/api/tickets/*").hasRole("CUSTOMER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/tickets/*").hasRole("ADMIN")
+
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 

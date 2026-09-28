@@ -25,7 +25,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/tickets").hasRole("CUSTOMER")
                         .requestMatchers(HttpMethod.PUT, "/api/tickets/*").hasRole("CUSTOMER")
                         .requestMatchers(HttpMethod.DELETE, "/api/tickets/*").hasRole("ADMIN")
-
+                        .requestMatchers(HttpMethod.POST, "/api/categories").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/categories/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/categories/*").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 

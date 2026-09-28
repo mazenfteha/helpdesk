@@ -20,4 +20,6 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
             order by t.createdAt desc
             """)
     List<Ticket> findVisibleToAgent(@Param("agentId") UUID agentId);
+
+    boolean existsByCategoryId(UUID categoryId);
 }

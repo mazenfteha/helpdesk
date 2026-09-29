@@ -23,6 +23,21 @@ public class TicketAccessPolicy {
         };
     }
 
+        public boolean canChangeStatus(Ticket ticket, CurrentUser currentUser) {
+        return switch (currentUser.role()) {
+            case ADMIN -> true;
+            case AGENT -> isAssignee(ticket, currentUser);
+            case CUSTOMER -> false;
+        };
+    }
+
+        public boolean canAssign(CurrentUser currentUser) {
+        return switch (currentUser.role()) {
+            case ADMIN -> true;
+            case AGENT, CUSTOMER -> false;
+        };
+    }
+
     private boolean isCustomer(Ticket ticket, CurrentUser currentUser) {
         return ticket.getCustomer().getId().equals(currentUser.id());
     }

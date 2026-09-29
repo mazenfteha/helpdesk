@@ -1,5 +1,7 @@
 package com.mazen.helpdesk.controller;
 
+import com.mazen.helpdesk.dto.AssignTicketRequest;
+import com.mazen.helpdesk.dto.ChangeStatusRequest;
 import com.mazen.helpdesk.dto.CreateTicketRequest;
 import com.mazen.helpdesk.dto.TicketResponse;
 import com.mazen.helpdesk.dto.UpdateTicketRequest;
@@ -51,16 +53,35 @@ public class TicketController {
         return ticketService.listTickets(CurrentUser.from(jwt));
     }
 
-    @PutMapping ("/{id}")
+    @PutMapping("/{id}")
     public TicketResponse update(@PathVariable UUID id, @Valid @RequestBody UpdateTicketRequest request,
             @AuthenticationPrincipal Jwt jwt) {
 
         return ticketService.updateTicket(id, request, CurrentUser.from(jwt));
     }
 
-    @DeleteMapping ("/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
         ticketService.deleteTicket(id);
+    }
+
+    @PatchMapping("/{id}/status")
+    public TicketResponse changeStatus(@PathVariable UUID id,
+            @Valid @RequestBody ChangeStatusRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        return ticketService.changeStatus(id, request, CurrentUser.from(jwt));
+    }
+
+    @PostMapping("/{id}/claim")
+    public TicketResponse claim(@PathVariable UUID id, @AuthenticationPrincipal Jwt jwt) {
+        return ticketService.claimTicket(id, CurrentUser.from(jwt));
+    }
+
+    @PatchMapping("/{id}/assignment")
+    public TicketResponse assign(@PathVariable UUID id,
+            @Valid @RequestBody AssignTicketRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        return ticketService.assignTicket(id, request, CurrentUser.from(jwt));
     }
 }

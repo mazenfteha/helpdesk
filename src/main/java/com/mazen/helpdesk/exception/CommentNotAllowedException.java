@@ -1,12 +1,10 @@
 package com.mazen.helpdesk.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.FORBIDDEN)
-public class CommentNotAllowedException extends RuntimeException {
+public class CommentNotAllowedException extends ApiException {
     public CommentNotAllowedException() {
-        super("Comment not allowed");
+        super(HttpStatus.FORBIDDEN, "Comment not allowed");
     }
 
 }

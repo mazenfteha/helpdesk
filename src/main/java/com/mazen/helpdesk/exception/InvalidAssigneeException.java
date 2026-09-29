@@ -1,12 +1,10 @@
 package com.mazen.helpdesk.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public class InvalidAssigneeException extends RuntimeException {
+public class InvalidAssigneeException extends ApiException {
 
     public InvalidAssigneeException() {
-        super("Assignee must be an existing agent");
+        super(HttpStatus.BAD_REQUEST, "Assignee must be an existing agent");
     }
 }

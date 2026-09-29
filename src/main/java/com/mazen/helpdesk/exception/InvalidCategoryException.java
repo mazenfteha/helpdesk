@@ -1,12 +1,10 @@
 package com.mazen.helpdesk.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public class InvalidCategoryException extends RuntimeException {
+public class InvalidCategoryException extends ApiException {
 
     public InvalidCategoryException() {
-        super("Category does not exist");
+        super(HttpStatus.BAD_REQUEST, "Category does not exist");
     }
 }

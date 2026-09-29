@@ -1,12 +1,10 @@
 package com.mazen.helpdesk.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.CONFLICT)
-public class TicketAlreadyAssignedException extends RuntimeException {
+public class TicketAlreadyAssignedException extends ApiException {
 
     public TicketAlreadyAssignedException() {
-        super("Ticket is already assigned");
+        super(HttpStatus.CONFLICT, "Ticket is already assigned");
     }
 }

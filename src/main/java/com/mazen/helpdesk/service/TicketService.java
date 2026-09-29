@@ -16,6 +16,7 @@ import com.mazen.helpdesk.repository.TicketCategoryRepository;
 import com.mazen.helpdesk.repository.TicketRepository;
 import com.mazen.helpdesk.repository.UserRepository;
 import com.mazen.helpdesk.security.CurrentUser;
+import com.mazen.helpdesk.security.TicketAccessPolicy;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,13 +30,15 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final TicketCategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final TicketAccessPolicy accessPolicy;
 
     public TicketService(TicketRepository ticketRepository,
             TicketCategoryRepository categoryRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository, TicketAccessPolicy accessPolicy) {
         this.ticketRepository = ticketRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.accessPolicy = accessPolicy;
     }
 
     @Transactional
@@ -61,7 +64,7 @@ public class TicketService {
     @Transactional(readOnly = true)
     public TicketResponse getTicket(UUID ticketId, CurrentUser currentUser) {
         Ticket ticket = ticketRepository.findById(ticketId)
-                .filter(t -> canView(t, currentUser))
+                .filter(t -> accessPolicy.canView(t, currentUser))
                 .orElseThrow(TicketNotFoundException::new);
 
         return TicketResponse.from(ticket);
@@ -84,7 +87,7 @@ public class TicketService {
     @Transactional
     public TicketResponse updateTicket(UUID ticketId, UpdateTicketRequest request, CurrentUser currentUser) {
         Ticket ticket = ticketRepository.findById(ticketId)
-                .filter(t -> canView(t, currentUser))
+                .filter(t -> accessPolicy.canView(t, currentUser))
                 .orElseThrow(TicketNotFoundException::new);
 
         if (ticket.getStatus() != TicketStatus.OPEN) {
@@ -114,12 +117,4 @@ public class TicketService {
         ticketRepository.delete(ticket);
     }
 
-    private boolean canView(Ticket ticket, CurrentUser currentUser) {
-        return switch (currentUser.role()) {
-            case ADMIN -> true;
-            case CUSTOMER -> ticket.getCustomer().getId().equals(currentUser.id());
-            case AGENT -> ticket.getAssignedTo() == null
-                    || ticket.getAssignedTo().getId().equals(currentUser.id());
-        };
-    }
 }
